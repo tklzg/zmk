@@ -9,5 +9,5 @@ struct behavior_sensor_rotate_config {
 };
 
 int zmk_behavior_sensor_rotate_common_trigger(struct zmk_behavior_binding *binding,
-                                              const struct device *sensor,
+                                              const struct sensor_value value,
                                               struct zmk_behavior_binding_event event);

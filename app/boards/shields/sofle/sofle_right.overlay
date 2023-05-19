@@ -24,3 +24,7 @@
 &right_encoder {
     status = "okay";
 };
+
+&right_encoder_2 {
+    status = "okay";
+};

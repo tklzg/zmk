@@ -20,3 +20,7 @@
 &left_encoder {
     status = "okay";
 };
+
+&left_encoder_2 {
+    status = "okay";
+};

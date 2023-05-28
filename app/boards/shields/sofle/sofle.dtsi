@@ -11,6 +11,10 @@
         zephyr,display = &oled;
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &default_transform;
+        zmk,left_encoder = &left_encoder;
+        zmk,left_encoder_2 = &left_encoder_2;
+        zmk,right_encoder = &right_encoder;
+        zmk,right_encoder_2 = &right_encoder_2;
     };
 
     default_transform: keymap_transform_0 {
@@ -51,7 +55,7 @@ RC(3,0) RC(3,1) RC(3,2) RC(3,3) RC(3,4) RC(3,5) RC(4,5) RC(4,6) RC(3,6) RC(3,7) 
         a-gpios = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <4>;
-        status = "disabled";
+        status = "okay";
     };
 
     left_encoder_2: encoder_left_2 {
@@ -60,7 +64,7 @@ RC(3,0) RC(3,1) RC(3,2) RC(3,3) RC(3,4) RC(3,5) RC(4,5) RC(4,6) RC(3,6) RC(3,7) 
         a-gpios = <&pro_micro 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <4>;
-        status = "disabled";
+        status = "okay";
     };
 
     right_encoder: encoder_right {
@@ -69,7 +73,7 @@ RC(3,0) RC(3,1) RC(3,2) RC(3,3) RC(3,4) RC(3,5) RC(4,5) RC(4,6) RC(3,6) RC(3,7) 
         a-gpios = <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <4>;
-        status = "disabled";
+        status = "okay";
     };
 
     right_encoder_2: encoder_right_2 {
@@ -78,7 +82,7 @@ RC(3,0) RC(3,1) RC(3,2) RC(3,3) RC(3,4) RC(3,5) RC(4,5) RC(4,6) RC(3,6) RC(3,7) 
         a-gpios = <&pro_micro 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <4>;
-        status = "disabled";
+        status = "okay";
     };
 
     sensors {

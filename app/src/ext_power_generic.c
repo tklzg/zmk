@@ -15,6 +15,7 @@
 #include <zephyr/drivers/gpio.h>
 
 #include <drivers/ext_power.h>
+#include <zmk/activity.h>
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
@@ -59,6 +60,8 @@ static int ext_power_generic_enable(const struct device *dev) {
     struct ext_power_generic_data *data = dev->data;
     const struct ext_power_generic_config *config = dev->config;
 
+    enable_encoder_all();
+
     if (gpio_pin_set_dt(&config->control, 1)) {
         LOG_WRN("Failed to set ext-power control pin");
         return -EIO;
@@ -70,6 +73,8 @@ static int ext_power_generic_enable(const struct device *dev) {
 static int ext_power_generic_disable(const struct device *dev) {
     struct ext_power_generic_data *data = dev->data;
     const struct ext_power_generic_config *config = dev->config;
+
+    disable_encoder_all_force();
 
     if (gpio_pin_set_dt(&config->control, 0)) {
         LOG_WRN("Failed to set ext-power control pin");

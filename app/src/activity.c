@@ -8,6 +8,8 @@
 #include <zephyr/init.h>
 #include <zephyr/kernel.h>
 #include <zephyr/pm/pm.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/sensor.h>
 
 #include <zephyr/logging/log.h>
 
@@ -31,6 +33,21 @@ bool is_usb_power_present() {
     return false;
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
 }
+
+struct ec11_config {
+    const struct gpio_dt_spec a;
+    const struct gpio_dt_spec b;
+
+    const uint8_t resolution;
+};
+
+static bool flag_for_encoder_disable = false;
+static bool flag_for_force_encoder_disable = false;
+
+static const struct device *left_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder));
+static const struct device *left_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder_2));
+static const struct device *right_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder));
+static const struct device *right_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder_2));
 
 static enum zmk_activity_state activity_state;
 
@@ -63,20 +80,90 @@ int activity_event_listener(const zmk_event_t *eh) {
     return set_state(ZMK_ACTIVITY_ACTIVE);
 }
 
+void disable_encoder(struct ec11_config *cfg)
+{
+    gpio_pin_interrupt_configure_dt(&cfg->a, GPIO_INT_DISABLE);
+    gpio_pin_configure_dt(&cfg->a, GPIO_OPEN_DRAIN);
+
+    gpio_pin_interrupt_configure_dt(&cfg->b, GPIO_INT_DISABLE);
+    gpio_pin_configure_dt(&cfg->b, GPIO_OPEN_DRAIN);
+}
+
+void enable_encoder(struct ec11_config *cfg)
+{
+    gpio_pin_configure_dt(&cfg->a, GPIO_INPUT);
+    gpio_pin_interrupt_configure_dt(&cfg->a, GPIO_INT_EDGE_BOTH);
+
+    gpio_pin_configure_dt(&cfg->b, GPIO_INPUT);
+    gpio_pin_interrupt_configure_dt(&cfg->b, GPIO_INT_EDGE_BOTH);
+}
+
+void disable_encoder_all()
+{
+    LOG_DBG("disable encoder");
+    disable_encoder(left_encoder->config);
+    disable_encoder(left_encoder_2->config);
+    disable_encoder(right_encoder->config);
+    disable_encoder(right_encoder_2->config);
+}
+
+void disable_encoder_all_force()
+{
+    LOG_DBG("force disable encoder");
+    flag_for_force_encoder_disable = true;
+    disable_encoder(left_encoder->config);
+    disable_encoder(left_encoder_2->config);
+    disable_encoder(right_encoder->config);
+    disable_encoder(right_encoder_2->config);
+}
+
+void enable_encoder_all()
+{
+    LOG_DBG("enable encoder");
+    flag_for_force_encoder_disable = false;
+    enable_encoder(left_encoder->config);
+    enable_encoder(left_encoder_2->config);
+    enable_encoder(right_encoder->config);
+    enable_encoder(right_encoder_2->config);
+}
+
 void activity_work_handler(struct k_work *work) {
     int32_t current = k_uptime_get();
     int32_t inactive_time = current - activity_last_uptime;
 #if IS_ENABLED(CONFIG_ZMK_SLEEP)
     if (inactive_time > MAX_SLEEP_MS && !is_usb_power_present()) {
         // Put devices in suspend power mode before sleeping
+        if(flag_for_encoder_disable == false)
+        {
+            disable_encoder_all();
+
+            flag_for_encoder_disable = true;
+        }
+
         set_state(ZMK_ACTIVITY_SLEEP);
+
         pm_state_force(0U, &(struct pm_state_info){PM_STATE_SOFT_OFF, 0, 0});
     } else
 #endif /* IS_ENABLED(CONFIG_ZMK_SLEEP) */
         if (inactive_time > MAX_IDLE_MS) {
+
+            if(flag_for_encoder_disable == false)
+            {
+                disable_encoder_all();
+
+                flag_for_encoder_disable = true;
+            }
+
             set_state(ZMK_ACTIVITY_IDLE);
         }
+        else if(flag_for_encoder_disable == true && flag_for_force_encoder_disable == false)
+        {
+            enable_encoder_all();
+
+            flag_for_encoder_disable = false;
+        }
 }
+
 
 K_WORK_DEFINE(activity_work, activity_work_handler);
 

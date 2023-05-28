@@ -28,3 +28,12 @@
 &right_encoder_2 {
     status = "okay";
 };
+
+&right_encoder_3 {
+    status = "okay";
+};
+
+&right_encoder_4 {
+    status = "okay";
+};
+

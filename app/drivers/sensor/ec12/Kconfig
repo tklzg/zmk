@@ -1,0 +1,9 @@
+# Copyright (c) 2020 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+menuconfig EC12
+    bool "EC12 Incremental Encoder Sensor"
+    depends on GPIO
+    help
+      Enable driver for EC12 incremental encoder sensors.
+

@@ -34,20 +34,20 @@ bool is_usb_power_present() {
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
 }
 
-struct ec11_config {
+struct ec12_config {
     const struct gpio_dt_spec a;
     const struct gpio_dt_spec b;
 
     const uint8_t resolution;
 };
 
+static const struct device *left_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder_3));
+static const struct device *left_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder_4));
+static const struct device *right_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder_3));
+static const struct device *right_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder_4));
+
 static bool flag_for_encoder_disable = false;
 static bool flag_for_force_encoder_disable = false;
-
-static const struct device *left_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder));
-static const struct device *left_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_left_encoder_2));
-static const struct device *right_encoder = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder));
-static const struct device *right_encoder_2 = DEVICE_DT_GET(DT_CHOSEN(zmk_right_encoder_2));
 
 static enum zmk_activity_state activity_state;
 
@@ -80,7 +80,7 @@ int activity_event_listener(const zmk_event_t *eh) {
     return set_state(ZMK_ACTIVITY_ACTIVE);
 }
 
-void disable_encoder(struct ec11_config *cfg)
+void disable_encoder(struct ec12_config *cfg)
 {
     gpio_pin_interrupt_configure_dt(&cfg->a, GPIO_INT_DISABLE);
     gpio_pin_configure_dt(&cfg->a, GPIO_OPEN_DRAIN);
@@ -89,7 +89,7 @@ void disable_encoder(struct ec11_config *cfg)
     gpio_pin_configure_dt(&cfg->b, GPIO_OPEN_DRAIN);
 }
 
-void enable_encoder(struct ec11_config *cfg)
+void enable_encoder(struct ec12_config *cfg)
 {
     gpio_pin_configure_dt(&cfg->a, GPIO_INPUT);
     gpio_pin_interrupt_configure_dt(&cfg->a, GPIO_INT_EDGE_BOTH);
@@ -135,7 +135,7 @@ void activity_work_handler(struct k_work *work) {
         // Put devices in suspend power mode before sleeping
         if(flag_for_encoder_disable == false)
         {
-            disable_encoder_all();
+            //disable_encoder_all();
 
             flag_for_encoder_disable = true;
         }
@@ -149,7 +149,7 @@ void activity_work_handler(struct k_work *work) {
 
             if(flag_for_encoder_disable == false)
             {
-                disable_encoder_all();
+                //disable_encoder_all();
 
                 flag_for_encoder_disable = true;
             }
@@ -158,7 +158,7 @@ void activity_work_handler(struct k_work *work) {
         }
         else if(flag_for_encoder_disable == true && flag_for_force_encoder_disable == false)
         {
-            enable_encoder_all();
+            //enable_encoder_all();
 
             flag_for_encoder_disable = false;
         }

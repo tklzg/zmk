@@ -24,3 +24,11 @@
 &left_encoder_2 {
     status = "okay";
 };
+
+&left_encoder_3 {
+    status = "okay";
+};
+
+&left_encoder_4 {
+    status = "okay";
+};

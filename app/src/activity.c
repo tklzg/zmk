@@ -135,7 +135,7 @@ void activity_work_handler(struct k_work *work) {
         // Put devices in suspend power mode before sleeping
         if(flag_for_encoder_disable == false)
         {
-            //disable_encoder_all();
+            disable_encoder_all();
 
             flag_for_encoder_disable = true;
         }
@@ -149,7 +149,7 @@ void activity_work_handler(struct k_work *work) {
 
             if(flag_for_encoder_disable == false)
             {
-                //disable_encoder_all();
+                disable_encoder_all();
 
                 flag_for_encoder_disable = true;
             }
@@ -158,7 +158,7 @@ void activity_work_handler(struct k_work *work) {
         }
         else if(flag_for_encoder_disable == true && flag_for_force_encoder_disable == false)
         {
-            //enable_encoder_all();
+            enable_encoder_all();
 
             flag_for_encoder_disable = false;
         }

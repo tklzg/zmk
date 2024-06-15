@@ -242,7 +242,7 @@ int zmk_keymap_position_state_changed(uint8_t source, uint32_t position, bool pr
             if (ret > 0) {
                 if(layer == ZMK_KEYMAP_LAYERS_LEN - 1 || layer == ZMK_KEYMAP_LAYERS_LEN - 2)
                 {
-                    zmk_keymap_layer_deactivate(layer);
+                    //zmk_keymap_layer_deactivate(layer);
                     LOG_DBG("behavior processing to continue to next layer %d %d",layer, ret);
                 }
                 LOG_DBG("behavior processing to continue to next layer %d %d",layer, ret);

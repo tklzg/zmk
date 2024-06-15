@@ -240,6 +240,11 @@ int zmk_keymap_position_state_changed(uint8_t source, uint32_t position, bool pr
         if (zmk_keymap_layer_active_with_state(layer, zmk_keymap_active_behavior_layer[position])) {
             int ret = zmk_keymap_apply_position_state(source, layer, position, pressed, timestamp);
             if (ret > 0) {
+                if(layer == ZMK_KEYMAP_LAYERS_LEN - 1 || layer == ZMK_KEYMAP_LAYERS_LEN - 2)
+                {
+                    zmk_keymap_layer_deactivate(layer);
+                    LOG_DBG("behavior processing to continue to next layer %d %d",layer, ret);
+                }
                 LOG_DBG("behavior processing to continue to next layer %d %d",layer, ret);
                 continue;
             } else if (ret < 0) {

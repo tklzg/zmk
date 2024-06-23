@@ -171,7 +171,7 @@ static void input_handler(const struct input_listener_config *config,
         }
 
         if (data->mouse.data.mode == INPUT_LISTENER_XY_DATA_MODE_REL) {
-            //zmk_hid_mouse_movement_set(data->mouse.data.x, data->mouse.data.y);
+            zmk_hid_mouse_movement_set(data->mouse.data.x, data->mouse.data.y);
         }
 
         if (data->mouse.button_set != 0) {
@@ -192,7 +192,7 @@ static void input_handler(const struct input_listener_config *config,
 
         zmk_endpoints_send_mouse_report();
         //zmk_hid_mouse_scroll_set(0, 0);
-        //zmk_hid_mouse_movement_set(0, 0);
+        zmk_hid_mouse_movement_set(0, 0);
 
         clear_xy_data(&data->mouse.data);
         clear_xy_data(&data->mouse.wheel_data);

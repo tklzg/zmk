@@ -151,7 +151,6 @@ static void input_handler(const struct input_listener_config *config,
                           struct input_listener_data *data, struct input_event *evt) {
     // First, filter to update the event data as needed.
 
-    return;
     filter_with_input_config(config, evt);
 
     switch (evt->type) {

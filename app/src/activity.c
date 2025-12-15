@@ -51,7 +51,6 @@ static uint32_t get_latest_ble_connection_active_timestamp(void) {
 
 bool is_usb_power_present(void) {
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-    return false;
     return zmk_usb_is_powered();
 #else
     return false;
@@ -95,7 +94,7 @@ void activity_work_handler(struct k_work *work) {
 #if IS_ENABLED(CONFIG_ZMK_SLEEP)
     if ((inactive_time > MAX_SLEEP_MS && !is_usb_power_present()) 
 #if IS_ENABLED(CONFIG_ZMK_SLEEP_ON_BLE_DISCONNECT)
-        || (current - get_latest_ble_connection_active_timestamp()) > MAX_DISCONNECT_MS
+        || ((current - get_latest_ble_connection_active_timestamp()) > MAX_DISCONNECT_MS)
 #endif
     ) {
         // Put devices in suspend power mode before sleeping

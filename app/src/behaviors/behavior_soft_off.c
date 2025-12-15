@@ -9,7 +9,6 @@
 #include <zephyr/device.h>
 #include <drivers/behavior.h>
 #include <zephyr/logging/log.h>
-#include <zmk/split/bluetooth/peripheral.h>
 
 #include <zmk/pm.h>
 #include <zmk/behavior.h>
@@ -25,7 +24,7 @@ struct behavior_soft_off_data {
     uint32_t press_start;
 };
 
-//#define IS_SPLIT_PERIPHERAL                                                                        \
+#define IS_SPLIT_PERIPHERAL                                                                        \
     (IS_ENABLED(CONFIG_ZMK_SPLIT) && !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 
 static int behavior_soft_off_init(const struct device *dev) { return 0; };

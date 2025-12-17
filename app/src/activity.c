@@ -95,7 +95,7 @@ void activity_work_handler(struct k_work *work) {
 #if IS_ENABLED(CONFIG_ZMK_SLEEP)
     if ((inactive_time > MAX_SLEEP_MS && !is_usb_power_present()) 
 #if IS_ENABLED(CONFIG_ZMK_SLEEP_ON_BLE_DISCONNECT)
-        || (current - get_latest_ble_connection_active_timestamp()) > MAX_DISCONNECT_MS
+        || (((current - get_latest_ble_connection_active_timestamp()) > MAX_DISCONNECT_MS) && !is_usb_power_present())
 #endif
     ) {
         // Put devices in suspend power mode before sleeping

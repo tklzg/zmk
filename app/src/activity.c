@@ -51,7 +51,6 @@ static uint32_t get_latest_ble_connection_active_timestamp(void) {
 
 bool is_usb_power_present(void) {
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-    return false;
     return zmk_usb_is_powered();
 #else
     return false;
